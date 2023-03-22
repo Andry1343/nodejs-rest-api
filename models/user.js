@@ -25,8 +25,8 @@ const userSchema = new Schema(
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
-      default: "starter"
-  },
+      default: "starter",
+    },
     token: {
       type: String,
       default: "",
@@ -34,7 +34,15 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
       required: true,
-  }
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -47,17 +55,22 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
 
 const subscriptionSchema = Joi.object({
-  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
 const schemas = {
   registerSchema,
+  emailSchema,
   loginSchema,
   subscriptionSchema,
 };
